@@ -21,30 +21,31 @@ const CreatePOPUP = () => {
 
         if (!firstName || !lastName || !number) {
             alert("Please fill all fields")
-        }
-        if (checkNumber) {
-            alert("Number already exists in the contact list")
         } else {
-            if (contacts.length === 0) {
-                const enterData = {
-                    _id: 0,
-                    firstName,
-                    lastName,
-                    number,
-                    image: 'https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659651_960_720.png'
-                }
-                dispatch({ type: "ADD_CONTACT", payload: enterData })
-                history.push("/")
+            if (checkNumber) {
+                alert("Number already exists in the contact list")
             } else {
-                const enterData = {
-                    _id: contacts[contacts.length-1]._id + 1,
-                    firstName,
-                    lastName,
-                    number,
-                    image: 'https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659651_960_720.png'
+                if (contacts.length === 0) {
+                    const enterData = {
+                        _id: 0,
+                        firstName,
+                        lastName,
+                        number,
+                        image: 'https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659651_960_720.png'
+                    }
+                    dispatch({ type: "ADD_CONTACT", payload: enterData })
+                    history.push("/")
+                } else {
+                    const enterData = {
+                        _id: contacts[contacts.length-1]._id + 1,
+                        firstName,
+                        lastName,
+                        number,
+                        image: 'https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659651_960_720.png'
+                    }
+                    dispatch({ type: "ADD_CONTACT", payload: enterData })
+                    history.push("/")
                 }
-                dispatch({ type: "ADD_CONTACT", payload: enterData })
-                history.push("/")
             }
         }
         

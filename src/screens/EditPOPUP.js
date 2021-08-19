@@ -32,19 +32,20 @@ const EditPOPUP = () => {
 
         if (!firstName || !lastName || !number) {
             alert("Please fill all fields")
-        }
-        if (checkNumber) {
-            alert("Number already exists in the contact list")
         } else {
-            const enterData = {
-                _id: parseInt(id),
-                firstName,
-                lastName,
-                number,
-                image: 'https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659651_960_720.png'
+            if (checkNumber) {
+                alert("Number already exists in the contact list")
+            } else {
+                const enterData = {
+                    _id: parseInt(id),
+                    firstName,
+                    lastName,
+                    number,
+                    image: 'https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659651_960_720.png'
+                }
+                dispatch({ type: "UPDATE_CONTACT", payload: enterData })
+                history.push("/")
             }
-            dispatch({ type: "UPDATE_CONTACT", payload: enterData })
-            history.push("/")
         }
         
     }
