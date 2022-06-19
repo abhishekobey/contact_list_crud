@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams, useHistory } from 'react-router-dom';
+import {editContact} from "../apiCalls";
 
 const EditPOPUP = () => {
 
-    const [firstName, setFirst] = useState("")
-    const [lastName, setLast] = useState("")
+    const [name, setName] = useState("")
     const [number, setNumber] = useState("")
 
     const { id } = useParams()
@@ -13,12 +13,11 @@ const EditPOPUP = () => {
     const dispatch = useDispatch()
 
     const contacts = useSelector((state) => state)
-    const current = contacts.find(contact => contact._id === parseInt(id))
+    const current = contacts.find(contact => contact._id === id)
 
     useEffect(() => {
         if (current) {
-            setFirst(current.firstName)
-            setLast(current.lastName)
+            setName(current.name)
             setNumber(current.number)
         }
     }, [current])
@@ -27,24 +26,26 @@ const EditPOPUP = () => {
         e.preventDefault()
 
         const checkNumber = contacts.find(
-            (contact) => contact._id !== parseInt(id) && contact.number === number
+            (contact) => contact._id !== id && contact.mobile_no === number
         )
 
-        if (!firstName || !lastName || !number) {
+        if (!name || !number) {
             alert("Please fill all fields")
         } else {
             if (checkNumber) {
                 alert("Number already exists in the contact list")
             } else {
                 const enterData = {
-                    _id: parseInt(id),
-                    firstName,
-                    lastName,
-                    number,
-                    image: 'https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659651_960_720.png'
+                    name: name,
+                    mobile_no: number,
+                    image: "https://cdn.pixabay.com/photo/2015/03/04/22/35/head-659651_960_720.png"
                 }
-                dispatch({ type: "UPDATE_CONTACT", payload: enterData })
-                history.push("/")
+                editContact(id, enterData, (res) => {
+                    if (res) {
+                        dispatch({type: "EDIT_CONTACT", payload: res})
+                        history.push("/")
+                    }
+                }, (err) => {console.log(err)})
             }
         }
         
@@ -54,24 +55,15 @@ const EditPOPUP = () => {
         <>
         {current ? (
             <div className='create'>
-                <h2>Edit Contact {id}</h2>
+                <h2>Edit Contact {current.name}</h2>
                 <form>
                     <div className='firstname'>
                         <label>First Name </label>
                         <input 
                             type="text"
                             placeholder='First Name'
-                            value={firstName}
-                            onChange={(e) => setFirst(e.target.value)} 
-                        />
-                    </div>
-                    <div className='lastname'>
-                        <label>Last Name </label>
-                        <input 
-                            type="text"
-                            placeholder='Last Name'
-                            value={lastName}
-                            onChange={(e) => setLast(e.target.value)} 
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                         />
                     </div>
                     <div className='number'>
